@@ -1,0 +1,30 @@
+{
+  "name": "airbean-admin-individuell",
+  "version": "1.0.0",
+  "description": "I denna **individuella del av examinationen** ska du bygga vidare på Airbean-API:t. Denna gång är det dags att skapa ett **admin-gränssnitt för att hantera kaffemenyn**.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NabeelMansour/Airbean-Admin-Individuell.git"
+  },
+  "keywords": [],
+  "author": "Nabeel Mansour",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/NabeelMansour/Airbean-Admin-Individuell/issues"
+  },
+  "homepage": "https://github.com/NabeelMansour/Airbean-Admin-Individuell#readme",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.15.1",
+    "nodemon": "^3.1.10",
+    "uuid": "^11.1.0"
+  }
+}
