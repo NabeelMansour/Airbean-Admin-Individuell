@@ -3,6 +3,7 @@ import Menu from "../models/menu.js";
 
 const router = Router();
 
+// GET all products in menu
 router.get("/", async (req, res) => {
   try {
     const menu = await Menu.find();
@@ -15,6 +16,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// GET product by ID
 router.get("/:id", async (req, res) => {
   try {
     const menu = await Menu.findOne({ prodId: req.params.id });
@@ -32,5 +34,9 @@ router.get("/:id", async (req, res) => {
     });
   }
 });
+
+// POST add new product to menu
+
+// PUT
 
 export default router;

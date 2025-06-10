@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
+import { v4 as uuidv4 } from "uuid";
 
 const menuSchema = new mongoose.Schema({
   prodId: {
     type: String,
     required: true,
+    default: () => uuidv4().replace(/-/g, "").slice(0, 8),
+    unique: true,
   },
   title: {
     type: String,
@@ -18,6 +21,10 @@ const menuSchema = new mongoose.Schema({
   price: {
     type: Number,
     required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 
