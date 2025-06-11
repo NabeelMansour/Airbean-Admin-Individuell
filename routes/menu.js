@@ -1,18 +1,26 @@
 import { Router } from "express";
 import Menu from "../models/menu.js";
-import { getMenu, createNewProduct } from "../services/menu.js";
+import {
+  getMenu,
+  createNewProduct,
+  updateProduct,
+  deleteProduct,
+} from "../services/menu.js";
 import { requireAdmin, requireAuth } from "../middleware/authorization.js";
 
 const router = Router();
 
 // GET all products in menu
-router.get("/", requireAuth, async (req, res) => {
-  try {
-    const menu = await getMenu();
-    res.json(menu);
-  } catch (error) {
-    res.status(401).json({
-      success: false,
+router.get("/", async (req, res, next) => {
+  const menu = await getMenu();
+  if (menu) {
+    res.json({
+      success: true,
+      menu: menu,
+    });
+  } else {
+    next({
+      status: 404,
       message: "No products could be found",
     });
   }
@@ -39,7 +47,6 @@ router.get("/:id", async (req, res) => {
 
 // POST add new product to menu
 router.post("/", requireAdmin, async (req, res, next) => {
-  console.log(requireAdmin);
   const { title, desc, price } = req.body;
   if (title && desc && price) {
     const result = await createNewProduct({
@@ -67,5 +74,50 @@ router.post("/", requireAdmin, async (req, res, next) => {
 });
 
 // PUT
+router.put("/:prodId", requireAdmin, async (req, res, next) => {
+  const { prodId } = req.params;
+  const { title, desc, price } = req.body;
+  if (title && desc && price) {
+    const result = await updateProduct(prodId, {
+      title: title,
+      desc: desc,
+      price: price,
+    });
+    if (result) {
+      res.status(201).json({
+        success: true,
+        message: "Product updated successfully",
+      });
+    } else {
+      next({
+        status: 400,
+        message: "Product could not be updated",
+      });
+    }
+  } else {
+    next({
+      status: 400,
+      message: "Both title, desc and price are required",
+    });
+  }
+});
+
+// DELETE
+router.delete("/:prodId", requireAdmin, async (req, res, next) => {
+  const { prodId } = req.params;
+  const result = await deleteProduct(prodId);
+
+  if (result) {
+    res.json({
+      success: true,
+      message: "Product deleted successfully",
+    });
+  } else {
+    next({
+      status: 400,
+      message: "Could not delete product",
+    });
+  }
+});
 
 export default router;
