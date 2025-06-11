@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import errorHandler from "./middleware/errorHandler.js";
 import logger from "./middleware/logger.js";
+import { requireAdmin } from "./middleware/authorization.js";
 
 // Config
 dotenv.config();

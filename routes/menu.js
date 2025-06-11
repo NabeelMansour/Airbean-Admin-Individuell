@@ -1,12 +1,14 @@
 import { Router } from "express";
 import Menu from "../models/menu.js";
+import { getMenu, createNewProduct } from "../services/menu.js";
+import { requireAdmin, requireAuth } from "../middleware/authorization.js";
 
 const router = Router();
 
 // GET all products in menu
-router.get("/", async (req, res) => {
+router.get("/", requireAuth, async (req, res) => {
   try {
-    const menu = await Menu.find();
+    const menu = await getMenu();
     res.json(menu);
   } catch (error) {
     res.status(401).json({
@@ -36,6 +38,33 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST add new product to menu
+router.post("/", requireAdmin, async (req, res, next) => {
+  console.log(requireAdmin);
+  const { title, desc, price } = req.body;
+  if (title && desc && price) {
+    const result = await createNewProduct({
+      title: title,
+      desc: desc,
+      price: price,
+    });
+    if (result) {
+      res.status(201).json({
+        success: true,
+        message: "New product created successfully",
+      });
+    } else {
+      next({
+        status: 400,
+        message: "New product could not be created",
+      });
+    }
+  } else {
+    next({
+      status: 400,
+      message: "Both title, desc and price are required",
+    });
+  }
+});
 
 // PUT
 
